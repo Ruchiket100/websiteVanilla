@@ -14,6 +14,7 @@ font-family: 'Montserrat', sans-serif;
 body {
     background: #0b161b;
     font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
 }
 
 #logo {
@@ -72,6 +73,7 @@ body {
     position: relative;
     flex: 1;
     flex-basis: 25rem;
+    overflow: hidden;
 }
 
 .hero-img img {
