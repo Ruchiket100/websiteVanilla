@@ -8,6 +8,7 @@ font-family: 'Montserrat', sans-serif;
 * {
     margin: 0;
     padding: 0;
+    border: none;
     box-sizing: border-box;
 }
 
@@ -22,9 +23,6 @@ body {
     font-family: 'Abril Fatface', cursive;
 }
 
-#logo:hover {
-    color: #e76f51;
-}
 
 .nav-header {
     min-height: 10vh;
@@ -32,10 +30,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
     color: white;
     width: 80%;
     margin: auto;
-    padding: 2rem orem;
+    padding: 2rem 0rem;
+    z-index: 2;
 }
 
 .line1,
@@ -45,6 +45,7 @@ body {
     margin: 0.4rem;
     background-color: white;
     pointer-events: none;
+    z-index: 2;
 }
 
 .section {
@@ -80,10 +81,12 @@ body {
     height: 100%;
     width: 100%;
     object-fit: cover;
+    margin: 1rem 0;
 }
 
 .img-sm-w-h img {
     width: 70%;
+    height: 95%;
 }
 
 .forest-span {
@@ -169,9 +172,9 @@ body {
 .reveal-text {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 180%;
     left: 0;
-    top: 0;
+    top: -20%;
     background: #0b161b;
 }
 
@@ -181,4 +184,63 @@ body {
     border: 2px solid white;
     border-radius: 50%;
     position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: all 0.5s ease-in-out;
+    transition-property: background, transform;
+    transform-origin: 75% 75%;
+}
+
+
+.cursor.active {
+    transform: scale(3);
+    background: #e9c56a;
+}
+
+.cursor.explore-active {
+    background: white;
+    transform: scale(3);
+    color: #0b161b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+}
+
+.title-swipe {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    pointer-events: none;
+    mix-blend-mode: darken;
+    transform: translateY(100%);
+}
+
+.title {
+    position: relative;
+    overflow: hidden;
+}
+
+.fo-t-swipe {
+    background: #2a9d8f;
+}
+
+.hi-t-swipe {
+    background: #e9c46a;
+}
+
+.fa-t-swipe {
+    background: #f4a261;
+}
+
+
+.scrollmagic-pin-spacer {
+    position: static !important;
+}
+
+/* stop scrolling */
+body.hide{
+    overflow: hidden;
 }
