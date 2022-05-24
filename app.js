@@ -1,3 +1,6 @@
+import barba from '../@barba/core';
+// module "C:/Users/dreamer/webDevelopement/websiteVanilla/node_modules/@barba/core/dist/core/src/typings"
+
 // we are using scroll-magic (gsap also integreated) for animation
 let controller;
 let sectionScene;
@@ -17,7 +20,7 @@ function animateSections() {
         // gsap timeline
         const tl = gsap.timeline({
             defaults: {
-                duration: 1,
+                duration: 1.2,
             },
         });
         tl.fromTo(
@@ -112,89 +115,158 @@ function animateSections() {
             .setTween(pageTl)
             .addTo(controller);
     });
-    // Selectors
-    const mouse = document.querySelector(".cursor");
-    const menuBar = document.querySelector(".menu-icon");
 
-    function cursor(e) {
-        mouse.style.top = e.pageY + "px";
-        mouse.style.left = e.pageX + "px";
-    }
-    // customize cursor cirle when hovering on different elements
-    function activeCursor(e) {
-        let element = e.target;
-        if (element.id === "logo" || element.classList.contains("menu-icon")) {
-            mouse.classList.add("active");
-        } else {
-            mouse.classList.remove("active");
-        }
-        if (element.classList.contains("explore")) {
-            mouse.classList.add("explore-active");
-            mouse.children[0].innerText = "Tap";
-            gsap.to(".title-swipe", 1, {
-                y: "0",
-            });
-        } else {
-            mouse.classList.remove("explore-active");
-            mouse.children[0].innerText = "";
-            gsap.to(".title-swipe", 1, {
-                y: "100%",
-            });
-        }
-    }
+} // Selectors
+const mouse = document.querySelector(".cursor");
+const menuBar = document.querySelector(".menu-icon");
+const logo = document.querySelector('#logo');
 
-    function navToggle(e) {
-        e.target.classList.toggle("active");
-        //  check if nav is open or not
-        if (e.target.classList.contains("active")) {
-            // two lines crossing animation
-            gsap.to(".line1", 0.5, {
-                rotate: "45",
-                y: "5",
-                background: "black",
-            });
-            gsap.to(".line2", 0.5, {
-                rotate: "-45",
-                y: "-5",
-                background: "black",
-            });
-            //  make logo color black
-            gsap.to("#logo", 0.5, {
-                color: "black",
-            });
-            gsap.to(".nav-bar", 1, {
-                clipPath: "circle(2500px at 100% -10%)",
-            });
-            // to stop scrolling home page when user on navbar section
-            document.body.classList.add("hide");
-        }
-        // close animation for navbar
-        else {
-            // two lines crossing animation
-            gsap.to(".line1", 0.5, {
-                rotate: "0",
-                y: "0",
-                background: "white",
-            });
-            gsap.to(".line2", 0.5, {
-                rotate: "0",
-                y: "0",
-                background: "white",
-            });
-            //  make logo color black
-            gsap.to("#logo", 0.5, {
-                color: "white",
-            });
-            gsap.to(".nav-bar", 1, {
-                clipPath: "circle(50px at 100% -10%)",
-            });
-            document.body.classList.remove("hide");
-        }
+function cursor(e) {
+    mouse.style.top = e.pageY + "px";
+    mouse.style.left = e.pageX + "px";
+}
+// customize cursor cirle when hovering on different elements
+function activeCursor(e) {
+    let element = e.target;
+    if (element.id === "logo" || element.classList.contains("menu-icon")) {
+        mouse.classList.add("active");
+    } else {
+        mouse.classList.remove("active");
     }
-    //  Event Listeners
-    window.addEventListener("mousemove", cursor);
-    window.addEventListener("mouseover", activeCursor);
-    menuBar.addEventListener("click", navToggle);
+    if (element.classList.contains("explore")) {
+        mouse.classList.add("explore-active");
+        mouse.children[0].innerText = "Tap";
+        gsap.to(".title-swipe", 1, {
+            y: "0",
+        });
+    } else {
+        mouse.classList.remove("explore-active");
+        mouse.children[0].innerText = "";
+        gsap.to(".title-swipe", 1, {
+            y: "100%",
+        });
+    }
 }
 
-animateSections();
+function navToggle(e) {
+    e.target.classList.toggle("active");
+    //  check if nav is open or not
+    if (e.target.classList.contains("active")) {
+        // two lines crossing animation
+        gsap.to(".line1", 0.5, {
+            rotate: "45",
+            y: "5",
+            background: "black",
+        });
+        gsap.to(".line2", 0.5, {
+            rotate: "-45",
+            y: "-5",
+            background: "black",
+        });
+        //  make logo color black
+        gsap.to("#logo", 0.5, {
+            color: "black",
+        });
+        gsap.to(".nav-bar", 1, {
+            clipPath: "circle(2500px at 100% -10%)",
+        });
+        // to stop scrolling home page when user on navbar section
+        document.body.classList.add("hide");
+    }
+    // close animation for navbar
+    else {
+        // two lines crossing animation
+        gsap.to(".line1", 0.5, {
+            rotate: "0",
+            y: "0",
+            background: "white",
+        });
+        gsap.to(".line2", 0.5, {
+            rotate: "0",
+            y: "0",
+            background: "white",
+        });
+        //  make logo color black
+        gsap.to("#logo", 0.5, {
+            color: "white",
+        });
+        gsap.to(".nav-bar", 1, {
+            clipPath: "circle(50px at 100% -10%)",
+        });
+        document.body.classList.remove("hide");
+    }
+}
+
+// BARBA Transition
+barba.init({
+    views: [{
+            namespace: "home",
+            beforeEnter() {
+                animateSections();
+                logo.href = './index.html';
+            },
+            beforeLeave() {
+                pageScene.destroy();
+                sectionScene.destroy();
+                controller.destroy();
+            },
+        },
+        {
+            namespace: "fashion",
+            beforeEnter() {
+                logo.href = '../index.html';
+            }
+        },
+    ],
+    transitions: [{
+        leave({
+            current,
+            next
+        }) {
+            // tell barba when to start
+            let done = this.init();
+            //  animation
+            const tl = gsap.timeline({
+                defaults: {
+                    ease: "power3.inOut",
+                },
+            });
+            tl.fromTo(
+                current.container, 1, {
+                    opacity: 1,
+                }, {
+                    opacity: 0,
+                    onComplete: done
+                }
+            );
+        },
+        enter({
+            current,
+            next
+        }) {
+            //scroll to top
+            window.scrollTo(0, 0);
+            // tell barba when to start
+            let done = this.init();
+            //  animation
+            const tl = gsap.timeline({
+                defaults: {
+                    ease: "power3.inOut",
+                },
+            });
+            tl.fromTo(
+                next.container, 1, {
+                    opacity: 0,
+                }, {
+                    opacity: 1,
+                    onComplete: done
+                }
+            );
+        },
+    }, ],
+});
+
+//  Event Listeners
+window.addEventListener("mousemove", cursor);
+window.addEventListener("mouseover", activeCursor);
+menuBar.addEventListener("click", navToggle);
